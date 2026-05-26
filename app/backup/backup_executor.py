@@ -75,6 +75,9 @@ class BackupExecutor:
             logger.error(f"备份主流程异常: {e}")
             entry["message"] = f"异常: {e}"
             self.ctx.history_handler.save_backup_history_entry(entry)
+            self.ctx.notification_handler.send_backup_notification(
+                success=False, message=entry["message"], backup_details={}
+            )
         finally:
             self.ctx._running = False
             self.ctx._backup_activity = "空闲"
